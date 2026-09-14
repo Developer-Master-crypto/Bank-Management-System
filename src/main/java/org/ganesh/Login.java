@@ -1,7 +1,13 @@
 package org.ganesh;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Login extends JFrame{
 
@@ -25,13 +31,25 @@ public class Login extends JFrame{
         text.setFont(new Font("Osward",Font.BOLD,38));
         text.setBounds(200,40,400,40);
         add(text);
-        JLabel cardno = new JLabel("Welcome to ATM");
+
+        JLabel cardno = new JLabel("Card No:");
         cardno.setFont(new Font("Osward",Font.BOLD,38));
-        cardno.setBounds(200,0,400,40);
+        cardno.setBounds(120,150,150,30);
         add(cardno);
-        JLabel pin = new JLabel("Welcome to ATM");
+
+        JTextField cardTextField = new JTextField();
+        cardTextField.setBounds(300, 150, 250, 30);
+        add(cardTextField);
+
+        JLabel pin = new JLabel("PIN:");
         pin.setFont(new Font("Osward",Font.BOLD,38));
+        pin.setBounds(150,220,250,30);
         add(pin);
+
+        JTextField pinTextField = new JTextField();
+        pinTextField.setBounds(300, 220, 250, 30);
+        add(pinTextField);
+
         getContentPane().setBackground(Color.WHITE);
         setSize(800,400);
 
