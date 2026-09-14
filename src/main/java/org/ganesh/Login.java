@@ -3,13 +3,21 @@ package org.ganesh;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login extends JFrame{
+public class Login extends JFrame implements ActionListener {
+
+    JButton login,signup,clear;
+    JTextField cardTextField;
+    JPasswordField pinTextField;
 
     Login() {
         setTitle("Automated Teller Machine");
@@ -17,13 +25,9 @@ public class Login extends JFrame{
         ImageIcon i1 = new ImageIcon(
                 ClassLoader.getSystemResource("icons/logo.jpg")
         );
-
         Image i2 = i1.getImage().getScaledInstance(100,100, Image.SCALE_DEFAULT);
-
         ImageIcon i3 = new ImageIcon(i2);
-
         JLabel label = new JLabel(i3);
-
         label.setBounds(70,10,100,100);
 
         add(label);
@@ -37,8 +41,9 @@ public class Login extends JFrame{
         cardno.setBounds(120,150,150,30);
         add(cardno);
 
-        JTextField cardTextField = new JTextField();
+        cardTextField = new JTextField();
         cardTextField.setBounds(300, 150, 250, 30);
+        cardTextField.setFont(new Font("Arial",Font.BOLD,14));
         add(cardTextField);
 
         JLabel pin = new JLabel("PIN:");
@@ -46,9 +51,31 @@ public class Login extends JFrame{
         pin.setBounds(150,220,250,30);
         add(pin);
 
-        JTextField pinTextField = new JTextField();
+        pinTextField = new JPasswordField();
         pinTextField.setBounds(300, 220, 250, 30);
+        pinTextField.setFont(new Font("Arial",Font.BOLD,14));
         add(pinTextField);
+
+         login = new JButton("SIGN IN");
+        login.setBounds(300,300,100,30);
+        login.setBackground(Color.RED);
+        login.setForeground(Color.WHITE);
+        login.addActionListener(this);
+        add(login);
+
+        clear = new JButton("CLEAR");
+        clear.setBounds(430,300,100,30);
+        clear.setBackground(Color.RED);
+        clear.setForeground(Color.WHITE);
+        clear.addActionListener(this);
+        add(clear);
+
+        signup = new JButton("Sign up");
+        signup.setBounds(300,350,230,30);
+        signup.setBackground(Color.RED);
+        signup.setForeground(Color.WHITE);
+        signup.addActionListener(this);
+        add(signup);
 
         getContentPane().setBackground(Color.WHITE);
         setSize(800,400);
@@ -61,6 +88,23 @@ public class Login extends JFrame{
 
     }
 
+    @Override 
+    public void actionPerformed(ActionEvent ae){
+        if (ae.getSource() == clear){
+            
+            cardTextField.setText("");
+            pinTextField.setText("");
+
+        } else if (ae.getSource() == login){
+
+
+
+        } else if (ae.getSource() == signup){
+
+
+
+        }
+    }
 
     public static void main(String[] args) {
         new Login();
