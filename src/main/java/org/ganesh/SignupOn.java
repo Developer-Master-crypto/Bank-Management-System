@@ -231,7 +231,7 @@ public class SignupOn extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "Name is required");
         } else {
             connjdbc c = new connjdbc();
-            String query = "insert into signup values('" + formno + "','" + name + "','" + fname + "','" + dob + "','" + gender + "','" + email + "','" + marital + "','" + address + "','" + city + "','" + state + "','" + pincode + "')";
+            String query = "insert into signup vajlues('" + formno + "','" + name + "','" + fname + "','" + dob + "','" + gender + "','" + email + "','" + marital + "','" + address + "','" + city + "','" + state + "','" + pincode + "')";
             c.s.executeUpdate(query);
 
             // setVisible(false);
