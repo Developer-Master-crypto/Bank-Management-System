@@ -13,7 +13,7 @@ Statement s;
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankmanagementsystem","VEIT","Password@28.");
             s = con.createStatement();
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 public static void main(String[] args) {
