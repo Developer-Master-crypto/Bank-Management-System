@@ -2,25 +2,36 @@ package org.ganesh;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import com.toedtor.calendar.JDateChooser;
+import com.toedter.calendar.JDateChooser;
 
-public class SignupOn extends JFrame {
+public class SignupOn extends JFrame implements ActionListener {
 
     JLabel formno,personDetails,name,fname,dob,gender,email,marital,city,Address,state,pincode;
-    JTextField nameTextField,fnameTextField,emailTextField,dobTextField,genderTextField,maritalTextField,AddressTextField,cityTextField,stateTextField,pincodeTextField;
+    JTextField nameTextField,fnameTextField,emailTextField,AddressTextField,cityTextField,stateTextField,pincodeTextField;
+    JRadioButton male,female,other,Marital,single;
+    ButtonGroup genderGroup,maritalGroup;
+    JButton next;
+    long random;
+    Random ran;
+    JDateChooser dateChooser;
 
     SignupOn() {
-
+        
+        ran = new Random();
         setLayout(null);
-
-        Random ran = new Random();
-        long random = Math.abs((ran.nextLong()%9000L)+1000L);
+        random = Math.abs((ran.nextLong()%9000L)+1000L);
 
         formno = new JLabel("Application Form no: " + random);
         formno.setFont(new Font("Raleway",Font.BOLD,38));
@@ -57,20 +68,43 @@ public class SignupOn extends JFrame {
         dob.setBounds(100,250,200,30);
         add(dob);
 
-        JDateChooser datechooser = new JDateChooser();
-        datechooser.setBounds(300,240,200,30);
-        add(datechooser);
-
+        dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("dd-MM-yyyy");
+        dateChooser.setDate(null); // Starts blank instead of today's date
+        dateChooser.setBounds(300, 250, 400, 30);
+        dateChooser.setFont(new Font("Raleway", Font.BOLD, 14));
+        dateChooser.setForeground(Color.GREEN);
+        add(dateChooser);
 
         gender = new JLabel("Gender: ");
         gender.setFont(new Font("Raleway",Font.BOLD,22));
         gender.setBounds(100,300,100,30);
         add(gender);
 
-        genderTextField = new JTextField();
-        genderTextField.setFont(new Font("Raleway",Font.BOLD,14));
-        genderTextField.setBounds(300,300,400,30);
-        add(genderTextField);
+        // genderTextField = new JTextField();
+        // genderTextField.setFont(new Font("Raleway",Font.BOLD,14));
+        // genderTextField.setBounds(300,300,400,30);
+        // add(genderTextField);
+
+        male = new JRadioButton("Male");
+        male.setBounds(300, 300, 60, 30);
+        male.setBackground(Color.white);
+        add(male);
+
+        female = new JRadioButton("Female");
+        female.setBounds(450, 300, 100, 30);
+        female.setBackground(Color.WHITE);
+        add(female);
+
+        other = new JRadioButton("Other");
+        other.setBounds(600, 300, 100, 30);
+        other.setBackground(Color.WHITE);
+        add(other);
+
+        genderGroup = new ButtonGroup();
+        genderGroup.add(male);
+        genderGroup.add(female);
+        genderGroup.add(other);
 
         email = new JLabel("Email Address: ");
         email.setFont(new Font("Raleway",Font.BOLD,22));
@@ -87,10 +121,24 @@ public class SignupOn extends JFrame {
         marital.setBounds(100,400,200,30);
         add(marital);
 
-        maritalTextField = new JTextField();
-        maritalTextField.setFont(new Font("Raleway",Font.BOLD,14));
-        maritalTextField.setBounds(300,400,400,30);
-        add(maritalTextField);
+        // maritalTextField = new JTextField();
+        // maritalTextField.setFont(new Font("Raleway",Font.BOLD,14));
+        // maritalTextField.setBounds(300,400,400,30);
+        // add(maritalTextField);
+
+        Marital = new JRadioButton("Married");
+        Marital.setBounds(300, 400, 100, 30);
+        Marital.setBackground(Color.WHITE);
+        add(Marital);
+
+        single = new JRadioButton("Single");
+        single.setBounds(450, 400, 100, 30);
+        single.setBackground(Color.WHITE);
+        add(single);
+
+        maritalGroup = new ButtonGroup();
+        maritalGroup.add(Marital);
+        maritalGroup.add(single);
 
         Address = new JLabel("Address: ");
         Address.setFont(new Font("Raleway",Font.BOLD,22));
@@ -132,6 +180,14 @@ public class SignupOn extends JFrame {
         pincodeTextField.setBounds(300,600,400,30);
         add(pincodeTextField);
 
+        next = new JButton("Next");
+        next.setBackground(Color.BLACK);
+        next.setForeground(Color.WHITE);
+        next.setFont(new Font("Raleway",Font.BOLD,14));
+        next.setBounds(620, 650, 80, 30);
+        next.addActionListener(this);
+        add(next);
+
         getContentPane().setBackground(Color.WHITE);
         setSize(850,800);
         setLocation(350,10);
@@ -142,5 +198,47 @@ public class SignupOn extends JFrame {
     public static void main(String[] args) {
         new SignupOn();
     }
+    @Override
+    public void actionPerformed(ActionEvent ae){
+        String formno = "" + random;
+        String name = nameTextField.getText();
+        String fname = fnameTextField.getText();
+        String dob = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
+        String gender = null;
+            if (male.isSelected()) {
+        gender = "Male";
+    } else if (female.isSelected()) {
+        gender = "Female";
+    } else if (other.isSelected()) {
+        gender = "Other";
+    }
 
+    String email = emailTextField.getText();
+    String marital = null;
+    if (Marital.isSelected()) {
+        marital = "Married";
+    } else if (single.isSelected()) {
+        marital = "Single";
+    }
+
+    String address = AddressTextField.getText();
+    String city = cityTextField.getText();
+    String state = stateTextField.getText();
+    String pincode = pincodeTextField.getText();
+
+    try {
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(null, "Name is required");
+        } else {
+            connjdbc c = new connjdbc();
+            String query = "insert into signup values('" + formno + "','" + name + "','" + fname + "','" + dob + "','" + gender + "','" + email + "','" + marital + "','" + address + "','" + city + "','" + state + "','" + pincode + "')";
+            c.s.executeUpdate(query);
+
+            // setVisible(false);
+            // new SignupTwo(formno).setVisible(true);
+        }
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+}
 }
