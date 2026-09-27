@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
-public class SignupOn extends JFrame implements ActionListener {
+public class SignupOne extends JFrame implements ActionListener {
 
     JLabel formno,personDetails,name,fname,dob,gender,email,marital,city,Address,state,pincode;
     JTextField nameTextField,fnameTextField,emailTextField,AddressTextField,cityTextField,stateTextField,pincodeTextField;
@@ -28,7 +28,7 @@ public class SignupOn extends JFrame implements ActionListener {
     Random ran;
     JDateChooser dateChooser;
 
-    SignupOn() {
+    SignupOne() {
         
         ran = new Random();
         setLayout(null);
@@ -199,16 +199,31 @@ public class SignupOn extends JFrame implements ActionListener {
     }
     
     public static void main(String[] args) {
-        new SignupOn();
+        new SignupOne();
     }
+    
     @Override
-    public void actionPerformed(ActionEvent ae){
-        String formno = "" + random;
-        String name = nameTextField.getText();
-        String fname = fnameTextField.getText();
-        String dob = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
-        String gender = null;
-            if (male.isSelected()) {
+public void actionPerformed(ActionEvent ae) {
+
+    String formno = "" + random;
+
+    // Get values from text fields
+    String name = nameTextField.getText().trim();
+    String fname = fnameTextField.getText().trim();
+
+    String dob = ((JTextField) dateChooser.getDateEditor()
+            .getUiComponent()).getText().trim();
+
+    String email = emailTextField.getText().trim();
+    String address = AddressTextField.getText().trim();
+    String city = cityTextField.getText().trim();
+    String state = stateTextField.getText().trim();
+    String pincode = pincodeTextField.getText().trim();
+
+    // Gender
+    String gender = null;
+
+    if (male.isSelected()) {
         gender = "Male";
     } else if (female.isSelected()) {
         gender = "Female";
@@ -216,46 +231,159 @@ public class SignupOn extends JFrame implements ActionListener {
         gender = "Other";
     }
 
-    String email = emailTextField.getText();
+    // Marital Status
     String marital = null;
+
     if (Marital.isSelected()) {
         marital = "Married";
     } else if (single.isSelected()) {
         marital = "Single";
     }
 
-    String address = AddressTextField.getText();
-    String city = cityTextField.getText();
-    String state = stateTextField.getText();
-    String pincode = pincodeTextField.getText();
-
     try {
-        if (name.equals("")) {
-        JOptionPane.showMessageDialog(null, "Name is required");
-    } else if (gender == null || marital == null) {
-        JOptionPane.showMessageDialog(null, "Please select gender and marital status");
-    } else {
-        connjdbc c = new connjdbc();
-        String query = "insert into signup values(?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = c.con.prepareStatement(query);
-        ps.setString(1, formno);
-        ps.setString(2, name);
-        ps.setString(3, fname);
-        ps.setString(4, dob);
-        ps.setString(5, gender);
-        ps.setString(6, email);
-        ps.setString(7, marital);
-        ps.setString(8, address);
-        ps.setString(9, city);
-        ps.setString(10, state);
-        ps.setString(11, pincode);
-        ps.executeUpdate();
 
-        JOptionPane.showMessageDialog(null, "Saved");
+        // ---------------- VALIDATION ----------------
+
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Name is required"
+            );
+            return;
+        }
+
+        if (fname.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Father's name is required"
+            );
+            return;
+        }
+
+        if (dob.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Date of birth is required"
+            );
+            return;
+        }
+
+        if (gender == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please select gender"
+            );
+            return;
+        }
+
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Email is required"
+            );
+            return;
+        }
+
+        // Simple email validation
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Please enter a valid email address"
+        );
+        return;
     }
+
+        if (marital == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please select marital status"
+            );
+            return;
+        }
+
+        if (address.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Address is required"
+            );
+            return;
+        }
+
+        if (city.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "City is required"
+            );
+            return;
+        }
+
+        if (state.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "State is required"
+            );
+            return;
+        }
+
+        if (pincode.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Pincode is required"
+            );
+            return;
+        }
+
+        // Indian 6-digit pincode validation
+        if (!pincode.matches("\\d{6}")) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Pincode must contain exactly 6 digits"
+            );
+            return;
+        }
+
+        // ---------------- DATABASE ----------------
+
+        connjdbc c = new connjdbc();
+
+        String query = "INSERT INTO signupOne "
+                + "(formno, name, fname, dob, gender, email, marital, "
+                + "address, city, state, pincode) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = c.con.prepareStatement(query)) {
+            ps.setString(1, formno);
+            ps.setString(2, name);
+            ps.setString(3, fname);
+            ps.setString(4, dob);
+            ps.setString(5, gender);
+            ps.setString(6, email);
+            ps.setString(7, marital);
+            ps.setString(8, address);
+            ps.setString(9, city);
+            ps.setString(10, state);
+            ps.setString(11, pincode);
+            ps.executeUpdate();
+            // ---------------- SUCCESS ----------------
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Form submitted successfully!\nForm Number: " + formno
+            );
+            // Move to next form if required
+            // setVisible(false);
+            // new SignupTwo(formno).setVisible(true);
+            // Close PreparedStatement
+        }
+        c.con.close();
+
     } catch (Exception e) {
-    e.printStackTrace();
-    JOptionPane.showMessageDialog(null, e.getMessage());
-}
+
+        e.printStackTrace();
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Database Error: " + e.getMessage()
+        );
+    }
 }
 }
