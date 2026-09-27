@@ -7,6 +7,7 @@ import java.sql.Statement;
 public class connjdbc {
 Connection con;
 Statement s;
+@SuppressWarnings("CallToPrintStackTrace")
     public connjdbc() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

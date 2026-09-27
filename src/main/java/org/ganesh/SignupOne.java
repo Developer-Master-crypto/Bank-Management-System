@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+@SuppressWarnings ("serial")
 public class SignupOne extends JFrame implements ActionListener {
 
     JLabel formno,personDetails,name,fname,dob,gender,email,marital,city,Address,state,pincode;
@@ -375,6 +376,8 @@ public void actionPerformed(ActionEvent ae) {
             // Close PreparedStatement
         }
         c.con.close();
+        setVisible(false);
+        new Signuptwo(formno).setVisible(true);
 
     } catch (Exception e) {
 
