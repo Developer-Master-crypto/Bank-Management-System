@@ -316,6 +316,8 @@ try {
             );
 
         }
+        setVisible(false);
+        new Signupthree(formno).setVisible(true);
 
     } catch (Exception e) {
 
