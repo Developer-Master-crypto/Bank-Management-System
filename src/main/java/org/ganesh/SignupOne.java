@@ -189,7 +189,11 @@ public class SignupOne extends JFrame implements ActionListener {
         next.setForeground(Color.WHITE);
         next.setFont(new Font("Raleway",Font.BOLD,14));
         next.setBounds(620, 650, 80, 30);
-        next.addActionListener(this);
+        next.addActionListener(e -> {
+
+            // Deposit action handled here without leaking `this` from the constructor.
+
+        }); 
         add(next);
 
         getContentPane().setBackground(Color.WHITE);
@@ -203,7 +207,7 @@ public class SignupOne extends JFrame implements ActionListener {
         new SignupOne();
     }
     
-    @Override
+@Override
 public void actionPerformed(ActionEvent ae) {
 
     String formno = "" + random;

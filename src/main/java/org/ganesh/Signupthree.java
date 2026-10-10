@@ -11,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 
 public class Signupthree extends JFrame implements ActionListener {
 
@@ -169,7 +169,7 @@ public class Signupthree extends JFrame implements ActionListener {
 
         setVisible(true);
     }
-
+@Override
     public void actionPerformed(ActionEvent ae){
         if(ae.getSource() == submit ){
             String accountType = null;
@@ -213,7 +213,7 @@ public class Signupthree extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Card Number: "+cardnumber+"\n Pin: "+pinnumber);
 
                     setVisible(false);
-                    new Deposit(pinnumber, 0.0).setVisible(true);
+                    //new Deposit(pinnumber, 0.0).setVisible(true);
                 }
             } catch (Exception e) {
                 System.out.println(e);

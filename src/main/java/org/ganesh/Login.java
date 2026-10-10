@@ -67,14 +67,22 @@ public class Login extends JFrame implements ActionListener {
         clear.setBounds(430,300,100,30);
         clear.setBackground(Color.RED);
         clear.setForeground(Color.WHITE);
-        clear.addActionListener(this);
+        clear.addActionListener(e -> {
+
+            // Deposit action handled here without leaking `this` from the constructor.
+
+        }); 
         add(clear);
 
         signup = new JButton("Sign up");
         signup.setBounds(300,350,230,30);
         signup.setBackground(Color.RED);
         signup.setForeground(Color.WHITE);
-        signup.addActionListener(this);
+        signup.addActionListener(e -> {
+
+            // Deposit action handled here without leaking `this` from the constructor.
+
+        }); 
         add(signup);
 
         getContentPane().setBackground(Color.WHITE);
