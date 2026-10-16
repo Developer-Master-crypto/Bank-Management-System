@@ -189,11 +189,7 @@ public class SignupOne extends JFrame implements ActionListener {
         next.setForeground(Color.WHITE);
         next.setFont(new Font("Raleway",Font.BOLD,14));
         next.setBounds(620, 650, 80, 30);
-        next.addActionListener(e -> {
-
-            // Deposit action handled here without leaking `this` from the constructor.
-
-        }); 
+        next.addActionListener(this); 
         add(next);
 
         getContentPane().setBackground(Color.WHITE);
@@ -216,8 +212,13 @@ public void actionPerformed(ActionEvent ae) {
     String name = nameTextField.getText().trim();
     String fname = fnameTextField.getText().trim();
 
-    String dob = ((JTextField) dateChooser.getDateEditor()
-            .getUiComponent()).getText().trim();
+    if (dateChooser.getDate() == null) {
+        JOptionPane.showMessageDialog(null, "Date of birth is required");
+        return;
+    }
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+
+    String dob = sdf.format(dateChooser.getDate());
 
     String email = emailTextField.getText().trim();
     String address = AddressTextField.getText().trim();
@@ -291,12 +292,12 @@ public void actionPerformed(ActionEvent ae) {
 
         // Simple email validation
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please enter a valid email address"
-        );
-        return;
-    }
+    JOptionPane.showMessageDialog(
+        null,
+        "Please enter a valid email address"
+    );
+    return;
+}
 
         if (marital == null) {
             JOptionPane.showMessageDialog(
@@ -340,12 +341,12 @@ public void actionPerformed(ActionEvent ae) {
 
         // Indian 6-digit pincode validation
         if (!pincode.matches("\\d{6}")) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Pincode must contain exactly 6 digits"
-            );
-            return;
-        }
+    JOptionPane.showMessageDialog(
+        null,
+        "Pincode must contain exactly 6 digits"
+    );
+    return;
+}
 
         // ---------------- DATABASE ----------------
 
