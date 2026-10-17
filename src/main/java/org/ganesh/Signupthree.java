@@ -225,8 +225,9 @@ public void actionPerformed(ActionEvent ae) {
         ps1.setString(5, facility.toString().trim());
         ps1.executeUpdate();
 
-        ps2.setString(1, cardnumber);
-        ps2.setString(2, pinnumber);
+        ps2.setString(1, formno);
+        ps2.setString(2, cardnumber);
+        ps2.setString(3, pinnumber);
         ps2.executeUpdate();
     } finally {
         c1.con.close();
