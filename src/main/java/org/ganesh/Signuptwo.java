@@ -191,7 +191,7 @@ public class Signuptwo extends JFrame implements ActionListener {
         next.setForeground(Color.WHITE);
         next.setFont(new Font("Raleway",Font.BOLD,14));
         next.setBounds(620, 650, 80, 30);
-        javax.swing.SwingUtilities.invokeLater(() -> next.addActionListener(this));
+        next.addActionListener(this);
         add(next);
 
         getContentPane().setBackground(Color.WHITE);
@@ -314,10 +314,10 @@ try {
                     null,
                     "Details saved successfully"
             );
-
-        }
         setVisible(false);
         new Signupthree(formno).setVisible(true);
+        }
+        
 
     } catch (Exception e) {
 

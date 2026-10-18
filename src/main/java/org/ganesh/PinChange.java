@@ -24,6 +24,7 @@ public class PinChange extends JFrame implements ActionListener {
     
     PinChange(String pinnumber){
         this.pinnumber = pinnumber;
+        setLayout(null);
 
         i1 = new ImageIcon(ClassLoader.getSystemResource("icons/atm.jpg"));
         i2 = i1.getImage().getScaledInstance(900, 900, Image.SCALE_DEFAULT);
@@ -83,13 +84,9 @@ public class PinChange extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         if(change == ae.getSource()){
             try{
-                String npin = pinfield.getText();
-                String rpin = repinfield.getText();
+                String npin = new String(pinfield.getPassword());
+                String rpin = new String(repinfield.getPassword());
                 
-                if(!npin.equals(rpin)){
-                    JOptionPane.showMessageDialog(null, "Entered PIN does not match");
-                    return;
-                }
                 if(npin.equals("")){
                     JOptionPane.showMessageDialog(null, "Please enter new PIN");
                     return;
@@ -97,6 +94,16 @@ public class PinChange extends JFrame implements ActionListener {
 
                 if(rpin.equals("")){
                     JOptionPane.showMessageDialog(null, "Please re-enter new PIN");
+                    return;
+                }
+
+                if(!npin.matches("\\d{4}")){
+                    JOptionPane.showMessageDialog(null, "PIN must be exactly 4 digits");
+                    return;
+                }
+
+                if(!npin.equals(rpin)){
+                    JOptionPane.showMessageDialog(null, "Entered PIN does not match");
                     return;
                 }
 

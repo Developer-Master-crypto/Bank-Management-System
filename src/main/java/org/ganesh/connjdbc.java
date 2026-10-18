@@ -9,24 +9,16 @@ public class connjdbc {
     Connection con;
     Statement s;
 
-    public connjdbc() throws SQLException {
-        try{
+    public connjdbc() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/bankmanagementsystem", "VEIT", "Password@28.");
+            s = con.createStatement();
         } catch (ClassNotFoundException e) {
-            throw new SQLException("MySQL driver not found. Add mysql-connector-j to your build path.", e);
-        }
-        con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/bankmanagementsystem", "VEIT", "Password@28.");
-        s = con.createStatement();
+            throw new RuntimeException("MySQL driver not found. Add mysql-connector-j to your build path.", e);
         } catch (SQLException e) {
-            throw new SQLException("Failed to connect to the database. Check your connection parameters.", e);
-            //throw new SQLException("An unexpected error occurred while connecting to the database.", e);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SQLException("An unexpected error occurred while connecting to the database.", e);
+            throw new RuntimeException("Failed to connect to the database. Check that MySQL is running and the credentials are correct.", e);
         }
     }
-
 }

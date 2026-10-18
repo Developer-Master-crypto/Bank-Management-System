@@ -3,9 +3,10 @@ package org.ganesh;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -72,40 +73,32 @@ public class Deposit extends JFrame implements ActionListener {
         if (ae.getSource() == deposit) {
             // Handle deposit action
             String amountText = amount.getText();
-            Date date = new Date();
+            String date = LocalDate.now().toString();
             if (amountText.isEmpty()) {
-                // Show error message for empty amount
                 JOptionPane.showMessageDialog(this, "Please enter an amount to deposit.");
             } else {
                 try {
-                    connjdbc c = new connjdbc();
-                    String query = "insert into bank values('" + pinnumber + "', '" + date + "', 'Deposit', '" + amountText + "')";
-					c.s.executeUpdate(query);
                     double depositAmount = Double.parseDouble(amountText);
                     if (depositAmount <= 0) {
-                        // Show error message for invalid amount
                         JOptionPane.showMessageDialog(this, "Please enter a valid amount greater than zero.");
-                    } else {
-                        // Proceed with deposit logic
-                        // For example, update the database with the new balance
-                        // Assuming you have a method to handle the deposit
-                        // updateBalance(pinnumber, depositAmount);
-                        JOptionPane.showMessageDialog(this, "Successfully deposited: Rs" + depositAmount);
-                        setVisible(false);
-                        new Transaction(pinnumber).setVisible(true);
+                        return;
                     }
+                    connjdbc c = new connjdbc();
+                    String query = "insert into bank values('" + pinnumber + "', '" + date + "', 'Deposit', '" + amountText + "')";
+                    c.s.executeUpdate(query);
+                    
+                    JOptionPane.showMessageDialog(this, "Successfully deposited: Rs" + depositAmount);
+                    setVisible(false);
+                    new Transaction(pinnumber).setVisible(true);
                 } catch (NumberFormatException e) {
-                    // Show error message for non-numeric input
                     JOptionPane.showMessageDialog(this, "Please enter a valid numeric amount.");
                 } catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-				} catch (Exception e) {
-                    // Handle any other exceptions
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Database error while processing the deposit: " + e.getMessage());
+                } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "An error occurred while processing the deposit.");
                     e.printStackTrace();
                 }
-
             }
             
         } else if (ae.getSource() == back) {

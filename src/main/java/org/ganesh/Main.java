@@ -1,13 +1,7 @@
 package org.ganesh;
 
-/**
- * Hello world!
- *
- */
-public class Main
-{
-    public static void main( String[] args )
-    {
-
+public class Main {
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(Login::new);
     }
 }

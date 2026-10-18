@@ -23,16 +23,17 @@ public class Login extends JFrame implements ActionListener {
 
     Login() {
         setTitle("Automated Teller Machine");
+        setLayout(null);
 
-        ImageIcon i1 = new ImageIcon(
-                ClassLoader.getSystemResource("icons/logo.jpg")
-        );
-        Image i2 = i1.getImage().getScaledInstance(100,100, Image.SCALE_DEFAULT);
-        ImageIcon i3 = new ImageIcon(i2);
-        JLabel label = new JLabel(i3);
-        label.setBounds(70,10,100,100);
-
-        add(label);
+        java.net.URL logoUrl = ClassLoader.getSystemResource("icons/logo.jpg");
+        if (logoUrl != null) {
+            ImageIcon i1 = new ImageIcon(logoUrl);
+            Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            ImageIcon i3 = new ImageIcon(i2);
+            JLabel label = new JLabel(i3);
+            label.setBounds(70, 10, 100, 100);
+            add(label);
+        }
         JLabel text = new JLabel("Welcome to ATM");
         text.setFont(new Font("Osward",Font.BOLD,38));
         text.setBounds(200,40,400,40);
@@ -40,7 +41,7 @@ public class Login extends JFrame implements ActionListener {
 
         JLabel cardno = new JLabel("Card No:");
         cardno.setFont(new Font("Osward",Font.BOLD,38));
-        cardno.setBounds(120,150,150,30);
+        cardno.setBounds(120,150,180,30);
         add(cardno);
 
         cardTextField = new JTextField();
@@ -69,28 +70,18 @@ public class Login extends JFrame implements ActionListener {
         clear.setBounds(430,300,100,30);
         clear.setBackground(Color.RED);
         clear.setForeground(Color.WHITE);
-        clear.addActionListener(e -> {
-
-            // Deposit action handled here without leaking `this` from the constructor.
-
-        }); 
+        clear.addActionListener(this);
         add(clear);
 
         signup = new JButton("Sign up");
         signup.setBounds(300,350,230,30);
         signup.setBackground(Color.RED);
         signup.setForeground(Color.WHITE);
-        signup.addActionListener(e -> {
-
-            // Deposit action handled here without leaking `this` from the constructor.
-
-        }); 
+        signup.addActionListener(this);
         add(signup);
 
         getContentPane().setBackground(Color.WHITE);
         setSize(800,400);
-
-        setLayout(null);
 
         setVisible(true);
 
@@ -106,12 +97,16 @@ public class Login extends JFrame implements ActionListener {
             pinTextField.setText("");
 
         } else if (ae.getSource() == login){
-            connjdbc conn = new connjdbc();
-            String cardnumber = cardTextField.getText();
-            String pinnumber = pinTextField.getText();
+            String cardnumber = cardTextField.getText().trim();
+            String pinnumber = new String(pinTextField.getPassword());
+            if (cardnumber.isEmpty() || pinnumber.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Card Number and PIN");
+                return;
+            }
             String query = "select * from login where cardnumber = '"+cardnumber+"' and pin = '"+pinnumber+"'";
            
             try{
+                    connjdbc conn = new connjdbc();
                      ResultSet rs =conn.s.executeQuery(query);
                     if(rs.next()){
                         setVisible(false);
@@ -119,11 +114,9 @@ public class Login extends JFrame implements ActionListener {
                     } else {
                         JOptionPane.showMessageDialog(null, "Incorrect Card Number or PIN");
                     }
-                // if(conn.rs.next()){
-                //     setVisible(false);
-                //     new Transaction().setVisible(true); 
             }catch(Exception e){
-                System.out.println(e);
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Unable to sign in: " + e.getMessage());
             }
         } else if (ae.getSource() == signup){
             setVisible(false);

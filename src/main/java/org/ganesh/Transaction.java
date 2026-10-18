@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,8 +21,8 @@ public class Transaction extends JFrame implements ActionListener {
         this.pinnumber=pinnumber;
         setLayout(null);
         i1 = new ImageIcon(ClassLoader.getSystemResource("icons/atm.jpg"));
-        i2 = i1.getImage().getScaledInstance(900, 900, Image.SCALE_DEFAULT);
-        i3 = new ImageIcon(i2);
+        i2 = i1.getImage() != null ? i1.getImage().getScaledInstance(900, 900, Image.SCALE_DEFAULT) : null;
+        i3 = i2 != null ? new ImageIcon(i2) : new ImageIcon();
         image = new JLabel(i3);
         image.setBounds(0, 0, 900, 900);
         add(image);
@@ -36,51 +35,37 @@ public class Transaction extends JFrame implements ActionListener {
 
         deposit = new JButton("Deposit");
         deposit.setBounds(170, 415, 150, 30);
-        deposit.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        });
+        deposit.addActionListener(this);
         image.add(deposit);
 
         withdraw = new JButton("Withdraw");
         withdraw.setBounds(355, 415, 150, 30);
-        withdraw.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        }); 
+        withdraw.addActionListener(this);
         image.add(withdraw);
 
         fastcash = new JButton("Fast Cash");
         fastcash.setBounds(170, 450, 150, 30);
-        fastcash.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        });
+        fastcash.addActionListener(this);
         image.add(fastcash);
 
         ministatement = new JButton("Mini Statement");
         ministatement.setBounds(355, 450, 150, 30);
-        ministatement.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        });
+        ministatement.addActionListener(this);
         image.add(ministatement);
         
         pinchange = new JButton("Pin Change");
         pinchange.setBounds(170, 485, 150, 30);
-        pinchange.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        }); 
+        pinchange.addActionListener(this);
         image.add(pinchange);
 
         balanceenquiry = new JButton("Balance Enquiry");
         balanceenquiry.setBounds(355, 485, 150, 30);
-        balanceenquiry.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        });
+        balanceenquiry.addActionListener(this);
         image.add(balanceenquiry);
 
         exit = new JButton("Exit");
         exit.setBounds(255, 520, 150, 30);
-        exit.addActionListener(e -> {
-            // Deposit action handled here without leaking `this` from the constructor.
-        });
+        exit.addActionListener(this);
         image.add(exit);
 
         setSize(900, 900);

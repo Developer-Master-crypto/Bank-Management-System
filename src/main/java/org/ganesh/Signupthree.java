@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 public class Signupthree extends JFrame implements ActionListener {
 
@@ -25,7 +24,6 @@ public class Signupthree extends JFrame implements ActionListener {
     JCheckBox atm, internet, mobile, email, cheque, eStatement,declare;
     JButton submit,cancel;
     String formno;
-    JTextField cardTextField,pinTextField;
 
     Signupthree(String formno) {
         this.formno = formno;
@@ -216,7 +214,7 @@ public void actionPerformed(ActionEvent ae) {
     try (PreparedStatement ps1 = c1.con.prepareStatement(
             "insert into signup3 values (?, ?, ?, ?, ?)");
          PreparedStatement ps2 = c1.con.prepareStatement(
-            "insert into login values (?, ?)")) {
+            "insert into login values (?,?,?)")) {
 
         ps1.setString(1, formno);
         ps1.setString(2, accountType);
@@ -235,8 +233,6 @@ public void actionPerformed(ActionEvent ae) {
 
     JOptionPane.showMessageDialog(null,
         "Card Number: " + cardnumber + "\nPin: " + pinnumber);
-    setVisible(false);
-
     setVisible(false);
     new Deposit(pinnumber).setVisible(true);
 

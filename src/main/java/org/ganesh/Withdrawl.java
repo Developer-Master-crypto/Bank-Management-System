@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -72,40 +73,44 @@ public class Withdrawl extends JFrame implements ActionListener {
         if (ae.getSource() == withdraw) {
             // Handle withdraw action
             String amountText = amount.getText();
-            Date date = new Date();
+            String date = LocalDate.now().toString();
             if (amountText.isEmpty()) {
-                // Show error message for empty amount
-                JOptionPane.showMessageDialog(this, "Please enter an amount to deposit.");
+                JOptionPane.showMessageDialog(this, "Please enter an amount to withdraw.");
             } else {
                 try {
-                    connjdbc c = new connjdbc();
-                    String query = "insert into bank values('" + pinnumber + "', '" + date + "', 'Withdraw', '" + amountText + "')";
-					c.s.executeUpdate(query);
-                    double depositAmount = Double.parseDouble(amountText);
-                    if (depositAmount <= 0) {
-                        // Show error message for invalid amount
+                    int withdrawAmount = Integer.parseInt(amountText);
+                    if (withdrawAmount <= 0) {
                         JOptionPane.showMessageDialog(this, "Please enter a valid amount greater than zero.");
-                    } else {
-                        // Proceed with deposit logic
-                        // For example, update the database with the new balance
-                        // Assuming you have a method to handle the deposit
-                        // updateBalance(pinnumber, depositAmount);
-                        JOptionPane.showMessageDialog(this, "Successfully Withdrawn: Rs" + depositAmount);
-                        setVisible(false);
-                        new Transaction(pinnumber).setVisible(true);
+                        return;
                     }
+                    connjdbc c = new connjdbc();
+                    ResultSet rs = c.s.executeQuery("select * from bank where pin = '" + pinnumber + "'");
+                    int balance = 0;
+                    while (rs.next()) {
+                        if (rs.getString("type").equals("Deposit")) {
+                            balance += Integer.parseInt(rs.getString("amount"));
+                        } else {
+                            balance -= Integer.parseInt(rs.getString("amount"));
+                        }
+                    }
+                    if (balance < withdrawAmount) {
+                        JOptionPane.showMessageDialog(this, "Insufficient Balance");
+                        return;
+                    }
+                    String query = "insert into bank values('" + pinnumber + "', '" + date + "', 'Withdraw', '" + amountText + "')";
+                    c.s.executeUpdate(query);
+                    JOptionPane.showMessageDialog(this, "Successfully Withdrawn: Rs" + withdrawAmount);
+                    setVisible(false);
+                    new Transaction(pinnumber).setVisible(true);
                 } catch (NumberFormatException e) {
-                    // Show error message for non-numeric input
                     JOptionPane.showMessageDialog(this, "Please enter a valid numeric amount.");
                 } catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-				} catch (Exception e) {
-                    // Handle any other exceptions
-                    JOptionPane.showMessageDialog(this, "An error occurred while processing the deposit.");
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Database error while processing the withdrawal.");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "An error occurred while processing the withdrawal.");
                     e.printStackTrace();
                 }
-
             }
             
         } else if (ae.getSource() == back) {
