@@ -73,9 +73,17 @@ public class MiniStatement extends JFrame {
             e.printStackTrace();
         }
 
-        setSize(400, 600);
+        setSize(400, 650);
         setLocation(20, 20);
         getContentPane().setBackground(java.awt.Color.WHITE);
+        // Fix: use DISPOSE_ON_CLOSE so closing this window does not shut down the whole app
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        javax.swing.JButton closeBtn = new javax.swing.JButton("Close");
+        closeBtn.setBounds(20, 440, 100, 30);
+        closeBtn.addActionListener(e -> dispose());
+        add(closeBtn);
+
         setVisible(true);
     }
 

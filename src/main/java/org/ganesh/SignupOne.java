@@ -351,6 +351,7 @@ public void actionPerformed(ActionEvent ae) {
         // ---------------- DATABASE ----------------
 
         connjdbc c = new connjdbc();
+        boolean success = false;
 
         String query = "INSERT INTO signupOne "
                 + "(formno, name, fname, dob, gender, email, marital, "
@@ -375,14 +376,16 @@ public void actionPerformed(ActionEvent ae) {
                     null,
                     "Form submitted successfully!\nForm Number: " + formno
             );
-            // Move to next form if required
-            // setVisible(false);
-            // new SignupTwo(formno).setVisible(true);
-            // Close PreparedStatement
+            success = true;
+        } finally {
+            // Fix: always close connection to prevent resource leak
+            try { c.con.close(); } catch (Exception ignored) {}
         }
-        c.con.close();
-        setVisible(false);
-        new Signuptwo(formno).setVisible(true);
+
+        if (success) {
+            setVisible(false);
+            new Signuptwo(formno).setVisible(true);
+        }
 
     } catch (Exception e) {
 

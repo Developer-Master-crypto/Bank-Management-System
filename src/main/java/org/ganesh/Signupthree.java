@@ -232,9 +232,12 @@ public void actionPerformed(ActionEvent ae) {
     }
 
     JOptionPane.showMessageDialog(null,
-        "Card Number: " + cardnumber + "\nPin: " + pinnumber);
+        "Registration Successful!\nCard Number: " + cardnumber
+        + "\nPIN: " + pinnumber
+        + "\n\nPlease log in with your new card number and PIN.");
     setVisible(false);
-    new Deposit(pinnumber).setVisible(true);
+    // Fix: redirect to Login — user must authenticate before accessing transactions
+    new Login().setVisible(true);
 
 } catch (SQLException e) {
     e.printStackTrace();

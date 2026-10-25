@@ -27,8 +27,9 @@ public class PinChange extends JFrame implements ActionListener {
         setLayout(null);
 
         i1 = new ImageIcon(ClassLoader.getSystemResource("icons/atm.jpg"));
-        i2 = i1.getImage().getScaledInstance(900, 900, Image.SCALE_DEFAULT);
-        i3 = new ImageIcon(i2);
+        // Fix: null-safe image scaling to prevent NullPointerException if resource is missing
+        i2 = i1.getImage() != null ? i1.getImage().getScaledInstance(900, 900, Image.SCALE_DEFAULT) : null;
+        i3 = i2 != null ? new ImageIcon(i2) : new ImageIcon();
         image = new JLabel(i3);
         image.setBounds(0, 0, 900, 900);
         add(image);
@@ -75,7 +76,7 @@ public class PinChange extends JFrame implements ActionListener {
 
         setSize(900, 900);
         setLocation(300, 0);
-        setUndecorated(true);
+        // Fix: removed setUndecorated(true) — it hid the title bar making the window unmovable/uncloseable
         setVisible(true);
         
 

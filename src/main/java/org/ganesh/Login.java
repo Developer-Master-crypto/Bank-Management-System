@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
@@ -17,13 +18,15 @@ import javax.swing.JTextField;
 
 public class Login extends JFrame implements ActionListener {
 
-    JButton login,signup,clear;
+    JButton login, signup, clear;
     JTextField cardTextField;
     JPasswordField pinTextField;
 
     Login() {
         setTitle("Automated Teller Machine");
         setLayout(null);
+        // Fix: ensure the app exits when Login window is closed
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         java.net.URL logoUrl = ClassLoader.getSystemResource("icons/logo.jpg");
         if (logoUrl != null) {
@@ -35,90 +38,94 @@ public class Login extends JFrame implements ActionListener {
             add(label);
         }
         JLabel text = new JLabel("Welcome to ATM");
-        text.setFont(new Font("Osward",Font.BOLD,38));
-        text.setBounds(200,40,400,40);
+        text.setFont(new Font("Oswald", Font.BOLD, 38));
+        text.setBounds(200, 40, 400, 40);
         add(text);
 
         JLabel cardno = new JLabel("Card No:");
-        cardno.setFont(new Font("Osward",Font.BOLD,38));
-        cardno.setBounds(120,150,180,30);
+        cardno.setFont(new Font("Oswald", Font.BOLD, 38));
+        cardno.setBounds(120, 150, 180, 30);
         add(cardno);
 
         cardTextField = new JTextField();
         cardTextField.setBounds(300, 150, 250, 30);
-        cardTextField.setFont(new Font("Arial",Font.BOLD,14));
+        cardTextField.setFont(new Font("Arial", Font.BOLD, 14));
         add(cardTextField);
 
         JLabel pin = new JLabel("PIN:");
-        pin.setFont(new Font("Osward",Font.BOLD,38));
-        pin.setBounds(150,220,250,30);
+        pin.setFont(new Font("Oswald", Font.BOLD, 38));
+        pin.setBounds(150, 220, 250, 30);
         add(pin);
 
         pinTextField = new JPasswordField();
         pinTextField.setBounds(300, 220, 250, 30);
-        pinTextField.setFont(new Font("Arial",Font.BOLD,14));
+        pinTextField.setFont(new Font("Arial", Font.BOLD, 14));
         add(pinTextField);
 
-         login = new JButton("SIGN IN");
-        login.setBounds(300,300,100,30);
+        login = new JButton("SIGN IN");
+        login.setBounds(300, 300, 100, 30);
         login.setBackground(Color.RED);
         login.setForeground(Color.WHITE);
         login.addActionListener(this);
         add(login);
 
         clear = new JButton("CLEAR");
-        clear.setBounds(430,300,100,30);
+        clear.setBounds(430, 300, 100, 30);
         clear.setBackground(Color.RED);
         clear.setForeground(Color.WHITE);
         clear.addActionListener(this);
         add(clear);
 
         signup = new JButton("Sign up");
-        signup.setBounds(300,350,230,30);
+        signup.setBounds(300, 350, 230, 30);
         signup.setBackground(Color.RED);
         signup.setForeground(Color.WHITE);
         signup.addActionListener(this);
         add(signup);
 
         getContentPane().setBackground(Color.WHITE);
-        setSize(800,400);
-
+        setSize(800, 400);
+        setLocation(350, 200);
         setVisible(true);
-
-        setLocation(350,200);
-
     }
 
-    @Override 
-    public void actionPerformed(ActionEvent ae){
-        if (ae.getSource() == clear){
-            
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == clear) {
             cardTextField.setText("");
             pinTextField.setText("");
 
-        } else if (ae.getSource() == login){
+        } else if (ae.getSource() == login) {
             String cardnumber = cardTextField.getText().trim();
             String pinnumber = new String(pinTextField.getPassword());
             if (cardnumber.isEmpty() || pinnumber.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please enter Card Number and PIN");
                 return;
             }
-            String query = "select * from login where cardnumber = '"+cardnumber+"' and pin = '"+pinnumber+"'";
-           
-            try{
-                    connjdbc conn = new connjdbc();
-                     ResultSet rs =conn.s.executeQuery(query);
-                    if(rs.next()){
+
+            // Fix: use PreparedStatement to prevent SQL injection
+            try {
+                connjdbc conn = new connjdbc();
+                try (PreparedStatement ps = conn.con.prepareStatement(
+                        "SELECT * FROM login WHERE cardnumber = ? AND pin = ?")) {
+                    ps.setString(1, cardnumber);
+                    ps.setString(2, pinnumber);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
                         setVisible(false);
                         new Transaction(pinnumber).setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Incorrect Card Number or PIN");
                     }
-            }catch(Exception e){
+                } finally {
+                    conn.con.close();
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Unable to sign in: " + e.getMessage());
             }
-        } else if (ae.getSource() == signup){
+
+        } else if (ae.getSource() == signup) {
             setVisible(false);
             new SignupOne().setVisible(true);
         }

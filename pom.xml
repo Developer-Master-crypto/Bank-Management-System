@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ganesh</groupId>
-  <artifactId>Bank_Management_Syatem</artifactId>
+  <artifactId>Bank_Management_System</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Bank_Management_Syatem</name>
+  <name>Bank_Management_System</name>
   <url>http://maven.apache.org</url>
 
   <properties>

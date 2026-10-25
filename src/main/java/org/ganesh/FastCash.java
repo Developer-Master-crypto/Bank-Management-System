@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -110,7 +110,7 @@ public class FastCash extends JFrame implements ActionListener {
                 return;
             }
 
-            Date date = new Date();
+            String date = LocalDate.now().toString();
             String query = "insert into bank values('" + pinnumber + "', '" + date + "', 'Withdraw', '" + amount + "')";
             con.s.executeUpdate(query);
             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Debited Successfully");
